@@ -1,0 +1,10 @@
+import { useState } from "react" import { Button } from "@/components/ui/button" import { Card, CardContent } from "@/components/ui/card" import { Input } from "@/components/ui/input" import { ScrollArea } from "@/components/ui/scroll-area"
+
+export default function GameBoostApp() { const [log, setLog] = useState("") const [customFreq, setCustomFreq] = useState("")
+
+const runCommand = async (command: string) => { const result = await fetch("/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ command }) }).then(res => res.text()) setLog(result) }
+
+const actions = [ { label: "Tạo Swap", command: "swap" }, { label: "Tắt hiệu ứng UI", command: "disable_ui" }, { label: "Dọn Cache", command: "clear_cache" }, { label: "Ép xung CPU", command: "overclock" }, { label: "Mở khóa FPS", command: "unlock_fps" }, { label: "Dọn RAM", command: "clear_ram" } ]
+
+return ( <div className="p-4 space-y-4 max-w-md mx-auto"> <h1 className="text-xl font-bold text-center">GameBoostApp</h1> <Card> <CardContent className="space-y-2 pt-4"> {actions.map(({ label, command }) => ( <Button key={command} className="w-full" onClick={() => runCommand(command)}> {label} </Button> ))} <div className="flex gap-2"> <Input placeholder="Tần số CPU (kHz)" value={customFreq} onChange={(e) => setCustomFreq(e.target.value)} /> <Button onClick={() => runCommand(set_freq:${customFreq})} disabled={!customFreq} > Áp dụng </Button> </div> <Button variant="destructive" className="w-full" onClick={() => runCommand("exit")}>Thoát</Button> </CardContent> </Card> <ScrollArea className="h-40 border p-2 rounded-md text-sm bg-black text-green-400"> <pre>{log || "[LOG] Đang chờ lệnh..."}</pre> </ScrollArea> </div> ) }
+
